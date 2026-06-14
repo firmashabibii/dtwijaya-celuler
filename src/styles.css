@@ -98,21 +98,21 @@
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
+  --background: oklch(0.18 0.02 250);
+  --foreground: oklch(0.96 0.005 250);
+  --card: oklch(0.22 0.025 255);
+  --card-foreground: oklch(0.96 0.005 250);
+  --popover: oklch(0.22 0.025 255);
+  --popover-foreground: oklch(0.96 0.005 250);
+  --primary: oklch(0.72 0.17 160);
+  --primary-foreground: oklch(0.15 0.02 250);
+  --secondary: oklch(0.28 0.03 255);
+  --secondary-foreground: oklch(0.96 0.005 250);
+  --muted: oklch(0.26 0.025 255);
+  --muted-foreground: oklch(0.7 0.03 256);
+  --accent: oklch(0.32 0.05 160);
+  --accent-foreground: oklch(0.96 0.005 250);
+  --destructive: oklch(0.65 0.21 25);
   --destructive-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
@@ -142,3 +142,32 @@
     color: var(--color-foreground);
   }
 }
+
+/* Thermal label print: 50mm x 30mm */
+@media print {
+  body * { visibility: hidden !important; }
+  .print-label, .print-label * { visibility: visible !important; }
+  .print-label {
+    display: block !important;
+    position: fixed;
+    inset: 0;
+    width: 50mm;
+    height: 30mm;
+    padding: 2mm;
+    background: white;
+    color: black;
+    text-align: center;
+    font-family: sans-serif;
+  }
+  .print-label .label-name {
+    font-size: 9pt;
+    font-weight: 600;
+    margin-bottom: 1mm;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .print-label canvas { max-width: 100%; height: auto; }
+  @page { size: 50mm 30mm; margin: 0; }
+}
+
