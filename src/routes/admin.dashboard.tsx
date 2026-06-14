@@ -296,37 +296,37 @@ function MonitorTab() {
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2"><AlertTriangle className="size-5 text-destructive" />Barang Stok Menipis</CardTitle>
+      <Card className="rounded-2xl border-zinc-200/70 shadow-sm">
+        <CardHeader className="p-6">
+          <CardTitle className="flex items-center gap-2 text-lg tracking-tight"><span className="flex size-9 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600"><AlertTriangle className="size-4" /></span>Barang Stok Menipis</CardTitle>
           <CardDescription>{low.length} item perlu restock</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6 pt-0">
           {low.length === 0 ? <p className="text-sm text-muted-foreground py-4">Semua stok aman.</p> : (
             <ul className="space-y-2">
               {low.map(i => (
-                <li key={i.id} className="flex justify-between rounded-md border border-border bg-muted/30 p-3">
+                <li key={i.id} className="flex justify-between items-center rounded-xl border border-zinc-100 bg-zinc-50/60 p-4 transition-colors hover:bg-primary/[0.04]">
                   <div><p className="font-medium">{i.name}</p><p className="text-xs text-muted-foreground font-mono">{i.sku}</p></div>
-                  <Badge variant="destructive">{i.quantity} / min {i.min_stock}</Badge>
+                  <Badge className="rounded-full bg-zinc-200 text-zinc-700 hover:bg-zinc-200 border-0 font-medium">{i.quantity} / min {i.min_stock}</Badge>
                 </li>
               ))}
             </ul>
           )}
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2"><Bell className="size-5 text-primary" />Notifikasi</CardTitle>
+      <Card className="rounded-2xl border-zinc-200/70 shadow-sm">
+        <CardHeader className="p-6">
+          <CardTitle className="flex items-center gap-2 text-lg tracking-tight"><span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary"><Bell className="size-4" /></span>Notifikasi</CardTitle>
           <CardDescription>Peringatan terbaru dari sistem</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6 pt-0">
           {notifs.length === 0 ? <p className="text-sm text-muted-foreground py-4">Belum ada notifikasi.</p> : (
             <ul className="space-y-2">
               {notifs.map(n => (
-                <li key={n.id} className="rounded-md border border-border bg-muted/30 p-3">
+                <li key={n.id} className="rounded-xl border border-zinc-100 bg-zinc-50/60 p-4">
                   <p className="font-medium text-sm">{n.title}</p>
                   <p className="text-xs text-muted-foreground mt-1">{n.message}</p>
-                  <p className="text-[10px] text-muted-foreground mt-1">{new Date(n.created_at).toLocaleString("id-ID")}</p>
+                  <p className="text-[10px] text-muted-foreground mt-2">{new Date(n.created_at).toLocaleString("id-ID")}</p>
                 </li>
               ))}
             </ul>
