@@ -232,18 +232,18 @@ function StockTab() {
   const filtered = items.filter(i => i.name.toLowerCase().includes(q.toLowerCase()) || i.sku.toLowerCase().includes(q.toLowerCase()));
 
   return (
-    <div className="space-y-3">
-      <Input placeholder="Cari nama atau SKU…" value={q} onChange={(e) => setQ(e.target.value)} />
-      {isLoading ? <div className="flex justify-center py-8"><Loader2 className="size-6 animate-spin" /></div> :
+    <div className="space-y-4">
+      <Input className="rounded-xl h-12 border-zinc-200 focus-visible:ring-primary" placeholder="Cari nama atau SKU…" value={q} onChange={(e) => setQ(e.target.value)} />
+      {isLoading ? <div className="flex justify-center py-8"><Loader2 className="size-6 animate-spin text-primary" /></div> :
         <div className="space-y-2">
           {filtered.length === 0 && <p className="text-center text-sm text-muted-foreground py-6">Tidak ada hasil</p>}
           {filtered.map(i => (
-            <div key={i.id} className="flex justify-between items-center rounded-lg border p-3">
+            <div key={i.id} className="flex justify-between items-center rounded-xl border border-zinc-100 bg-white p-4 transition-colors hover:border-primary/30">
               <div className="min-w-0">
-                <p className="font-medium truncate">{i.name}</p>
+                <p className="font-medium truncate text-zinc-950">{i.name}</p>
                 <p className="text-xs text-muted-foreground font-mono">{i.sku}</p>
               </div>
-              <div className={"text-sm font-semibold px-3 py-1 rounded-full " + (i.quantity <= 0 ? "bg-destructive/15 text-destructive" : "bg-primary/15 text-primary")}>
+              <div className={"text-sm font-semibold px-3 py-1 rounded-full tabular-nums " + (i.quantity <= 0 ? "bg-zinc-100 text-zinc-500" : "bg-primary/10 text-primary")}>
                 {i.quantity}
               </div>
             </div>
