@@ -143,6 +143,20 @@
   }
 }
 
+@keyframes scan-pulse {
+  0%, 100% { transform: translateY(-50%); opacity: 0.4; }
+  50% { transform: translateY(50%); opacity: 1; }
+}
+.scan-line {
+  animation: scan-pulse 2s ease-in-out infinite;
+}
+
+@keyframes soft-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.55 0.22 258 / 0.5); }
+  50% { box-shadow: 0 0 0 12px oklch(0.55 0.22 258 / 0); }
+}
+.pulse-ring { animation: soft-pulse 2s ease-out infinite; }
+
 /* Thermal label print: 50mm x 30mm */
 @media print {
   body * { visibility: hidden !important; }
