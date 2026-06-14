@@ -114,23 +114,24 @@ function ItemsTab() {
   });
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+    <Card className="rounded-2xl border-zinc-200/70 shadow-sm">
+      <CardHeader className="flex flex-row items-center justify-between p-6">
         <div>
-          <CardTitle>Daftar Barang</CardTitle>
+          <CardTitle className="text-xl tracking-tight">Daftar Barang</CardTitle>
           <CardDescription>Kelola spare part dan stok konter</CardDescription>
         </div>
-        <Button onClick={() => { setEditing(null); setOpen(true); }}>
+        <Button onClick={() => { setEditing(null); setOpen(true); }} className="rounded-xl shadow-sm shadow-primary/30 transition-all duration-300 hover:scale-[1.02]">
           <Plus className="mr-2 size-4" />Tambah Barang
         </Button>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-6 pt-0">
         {isLoading ? (
-          <div className="flex justify-center py-12"><Loader2 className="size-6 animate-spin" /></div>
+          <div className="flex justify-center py-12"><Loader2 className="size-6 animate-spin text-primary" /></div>
         ) : (
+          <div className="rounded-xl border border-zinc-200/70 overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="bg-zinc-50/80 hover:bg-zinc-50/80 border-zinc-200/70">
                 <TableHead>SKU</TableHead>
                 <TableHead>Nama</TableHead>
                 <TableHead>Kategori</TableHead>
@@ -148,26 +149,28 @@ function ItemsTab() {
                 const cat = categories.find(c => c.id === it.category_id);
                 const low = it.quantity <= it.min_stock;
                 return (
-                  <TableRow key={it.id}>
-                    <TableCell className="font-mono text-xs">{it.sku}</TableCell>
+                  <TableRow key={it.id} className="border-zinc-100 hover:bg-primary/[0.03] transition-colors duration-200">
+                    <TableCell className="font-mono text-xs text-muted-foreground">{it.sku}</TableCell>
                     <TableCell className="font-medium">{it.name}</TableCell>
-                    <TableCell>{cat?.name ?? "-"}</TableCell>
-                    <TableCell className="text-right">Rp {Number(it.price ?? 0).toLocaleString("id-ID")}</TableCell>
-                    <TableCell className="text-right">{it.quantity}</TableCell>
+                    <TableCell className="text-muted-foreground">{cat?.name ?? "-"}</TableCell>
+                    <TableCell className="text-right tabular-nums">Rp {Number(it.price ?? 0).toLocaleString("id-ID")}</TableCell>
+                    <TableCell className="text-right font-semibold tabular-nums">{it.quantity}</TableCell>
                     <TableCell>
-                      <Badge variant={low ? "destructive" : "default"} className={low ? "" : "bg-primary/20 text-primary hover:bg-primary/20"}>
-                        {low ? "Stok Menipis" : "Stok Aman"}
-                      </Badge>
+                      {low ? (
+                        <Badge variant="secondary" className="rounded-full bg-zinc-100 text-zinc-600 hover:bg-zinc-100 font-medium border-0">Stok Menipis</Badge>
+                      ) : (
+                        <Badge className="rounded-full bg-primary/10 text-primary hover:bg-primary/10 font-medium border-0">Stok Aman</Badge>
+                      )}
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-1">
-                        <Button variant="ghost" size="icon" onClick={() => setBarcodeFor(it)} title="Cetak Barcode">
+                        <Button variant="ghost" size="icon" className="rounded-lg hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => setBarcodeFor(it)} title="Cetak Barcode">
                           <Barcode className="size-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => { setEditing(it); setOpen(true); }} title="Edit">
+                        <Button variant="ghost" size="icon" className="rounded-lg hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => { setEditing(it); setOpen(true); }} title="Edit">
                           <Pencil className="size-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => { if (confirm(`Hapus ${it.name}?`)) del.mutate(it.id); }} title="Hapus">
+                        <Button variant="ghost" size="icon" className="rounded-lg hover:bg-destructive/10 transition-colors" onClick={() => { if (confirm(`Hapus ${it.name}?`)) del.mutate(it.id); }} title="Hapus">
                           <Trash2 className="size-4 text-destructive" />
                         </Button>
                       </div>
@@ -177,6 +180,7 @@ function ItemsTab() {
               })}
             </TableBody>
           </Table>
+          </div>
         )}
       </CardContent>
       <ItemDialog open={open} onOpenChange={setOpen} editing={editing} categories={categories} />
