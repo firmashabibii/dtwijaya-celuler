@@ -371,51 +371,63 @@ function SalesTab() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card><CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Total Pendapatan</CardTitle><DollarSign className="size-4 text-primary" />
-        </CardHeader><CardContent><div className="text-2xl font-bold">Rp {totals.revenue.toLocaleString("id-ID")}</div></CardContent></Card>
-        <Card><CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Total Item Terjual</CardTitle><Package className="size-4 text-primary" />
-        </CardHeader><CardContent><div className="text-2xl font-bold">{totals.items}</div></CardContent></Card>
-        <Card><CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Hari Tercatat</CardTitle><TrendingUp className="size-4 text-primary" />
-        </CardHeader><CardContent><div className="text-2xl font-bold">{byDate.length}</div></CardContent></Card>
+      <div className="grid gap-5 md:grid-cols-3">
+        <Card className="rounded-2xl border-zinc-200/70 shadow-sm bg-gradient-to-br from-white to-primary/[0.03] transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+          <CardHeader className="flex flex-row items-center justify-between p-6 pb-2">
+            <CardTitle className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Total Pendapatan</CardTitle>
+            <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><DollarSign className="size-5" /></span>
+          </CardHeader>
+          <CardContent className="p-6 pt-2"><div className="text-3xl font-bold tracking-tight tabular-nums">Rp {totals.revenue.toLocaleString("id-ID")}</div></CardContent>
+        </Card>
+        <Card className="rounded-2xl border-zinc-200/70 shadow-sm bg-gradient-to-br from-white to-primary/[0.03] transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+          <CardHeader className="flex flex-row items-center justify-between p-6 pb-2">
+            <CardTitle className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Total Item Terjual</CardTitle>
+            <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><Package className="size-5" /></span>
+          </CardHeader>
+          <CardContent className="p-6 pt-2"><div className="text-3xl font-bold tracking-tight tabular-nums">{totals.items}</div></CardContent>
+        </Card>
+        <Card className="rounded-2xl border-zinc-200/70 shadow-sm bg-gradient-to-br from-white to-primary/[0.03] transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+          <CardHeader className="flex flex-row items-center justify-between p-6 pb-2">
+            <CardTitle className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Hari Tercatat</CardTitle>
+            <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><TrendingUp className="size-5" /></span>
+          </CardHeader>
+          <CardContent className="p-6 pt-2"><div className="text-3xl font-bold tracking-tight tabular-nums">{byDate.length}</div></CardContent>
+        </Card>
       </div>
 
-      <Card>
-        <CardHeader><CardTitle>Tren Penjualan Harian</CardTitle><CardDescription>Pendapatan per hari</CardDescription></CardHeader>
-        <CardContent className="h-[320px]">
-          {isLoading ? <div className="flex h-full items-center justify-center"><Loader2 className="size-6 animate-spin" /></div> :
+      <Card className="rounded-2xl border-zinc-200/70 shadow-sm">
+        <CardHeader className="p-6"><CardTitle className="text-lg tracking-tight">Tren Penjualan Harian</CardTitle><CardDescription>Pendapatan per hari</CardDescription></CardHeader>
+        <CardContent className="h-[340px] p-6 pt-0">
+          {isLoading ? <div className="flex h-full items-center justify-center"><Loader2 className="size-6 animate-spin text-primary" /></div> :
             byDate.length === 0 ? <p className="text-sm text-muted-foreground text-center py-12">Belum ada data penjualan.</p> :
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={byDate}>
+              <AreaChart data={byDate} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
                 <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="oklch(0.7 0.18 160)" stopOpacity={0.6} />
-                  <stop offset="100%" stopColor="oklch(0.7 0.18 160)" stopOpacity={0} />
+                  <stop offset="0%" stopColor="oklch(0.55 0.22 258)" stopOpacity={0.35} />
+                  <stop offset="100%" stopColor="oklch(0.55 0.22 258)" stopOpacity={0} />
                 </linearGradient></defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="oklch(1 0 0 / 0.08)" />
-                <XAxis dataKey="date" stroke="oklch(0.7 0.04 256)" fontSize={12} />
-                <YAxis stroke="oklch(0.7 0.04 256)" fontSize={12} />
-                <Tooltip contentStyle={{ background: "oklch(0.2 0.04 265)", border: "1px solid oklch(1 0 0 / 0.1)", borderRadius: 8 }} />
-                <Area type="monotone" dataKey="revenue" stroke="oklch(0.7 0.18 160)" fill="url(#g)" strokeWidth={2} />
+                <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.9 0.005 250)" vertical={false} />
+                <XAxis dataKey="date" stroke="oklch(0.55 0.015 250)" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="oklch(0.55 0.015 250)" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip contentStyle={{ background: "white", border: "1px solid oklch(0.93 0.006 250)", borderRadius: 12, boxShadow: "0 8px 24px -8px oklch(0.55 0.22 258 / 0.2)" }} labelStyle={{ color: "oklch(0.16 0.01 250)", fontWeight: 600 }} itemStyle={{ color: "oklch(0.55 0.22 258)" }} />
+                <Area type="monotone" dataKey="revenue" stroke="oklch(0.55 0.22 258)" fill="url(#g)" strokeWidth={2.5} />
               </AreaChart>
             </ResponsiveContainer>
           }
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader><CardTitle>Barang Terlaris</CardTitle><CardDescription>Total item terjual per produk</CardDescription></CardHeader>
-        <CardContent className="h-[320px]">
+      <Card className="rounded-2xl border-zinc-200/70 shadow-sm">
+        <CardHeader className="p-6"><CardTitle className="text-lg tracking-tight">Barang Terlaris</CardTitle><CardDescription>Total item terjual per produk</CardDescription></CardHeader>
+        <CardContent className="h-[340px] p-6 pt-0">
           {byItem.length === 0 ? <p className="text-sm text-muted-foreground text-center py-12">Belum ada data.</p> :
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={byItem}>
-                <CartesianGrid strokeDasharray="3 3" stroke="oklch(1 0 0 / 0.08)" />
-                <XAxis dataKey="name" stroke="oklch(0.7 0.04 256)" fontSize={11} />
-                <YAxis stroke="oklch(0.7 0.04 256)" fontSize={12} />
-                <Tooltip contentStyle={{ background: "oklch(0.2 0.04 265)", border: "1px solid oklch(1 0 0 / 0.1)", borderRadius: 8 }} />
-                <Bar dataKey="qty" fill="oklch(0.7 0.18 160)" radius={[6, 6, 0, 0]} />
+              <BarChart data={byItem} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.9 0.005 250)" vertical={false} />
+                <XAxis dataKey="name" stroke="oklch(0.55 0.015 250)" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="oklch(0.55 0.015 250)" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip cursor={{ fill: "oklch(0.55 0.22 258 / 0.06)" }} contentStyle={{ background: "white", border: "1px solid oklch(0.93 0.006 250)", borderRadius: 12, boxShadow: "0 8px 24px -8px oklch(0.55 0.22 258 / 0.2)" }} labelStyle={{ color: "oklch(0.16 0.01 250)", fontWeight: 600 }} itemStyle={{ color: "oklch(0.55 0.22 258)" }} />
+                <Bar dataKey="qty" fill="oklch(0.55 0.22 258)" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           }
