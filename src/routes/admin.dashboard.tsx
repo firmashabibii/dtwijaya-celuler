@@ -39,25 +39,25 @@ function AdminDashboard() {
   }, [loading, session, profile, navigate]);
 
   if (loading || !profile) {
-    return <div className="dark min-h-screen flex items-center justify-center bg-background"><Loader2 className="size-8 animate-spin text-primary" /></div>;
+    return <div className="min-h-screen flex items-center justify-center bg-background"><Loader2 className="size-8 animate-spin text-primary" /></div>;
   }
 
   return (
-    <div className="dark min-h-screen bg-background text-foreground">
-      <header className="border-b border-border bg-card sticky top-0 z-10">
-        <div className="container mx-auto flex items-center justify-between px-6 py-4">
+    <div className="min-h-screen bg-zinc-50 text-foreground">
+      <header className="border-b border-zinc-200/70 bg-white/80 backdrop-blur-lg sticky top-0 z-10">
+        <div className="container mx-auto flex items-center justify-between px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-lg bg-primary/15 text-primary">
+            <div className="flex size-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm shadow-primary/30">
               <Smartphone className="size-5" />
             </div>
             <div>
-              <h1 className="text-lg font-semibold">Dashboard Admin</h1>
+              <h1 className="text-lg font-semibold tracking-tight">Dashboard Admin</h1>
               <p className="text-xs text-muted-foreground">Konter Handphone</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-muted-foreground">{profile.email}</span>
-            <Button variant="outline" size="sm" onClick={() => { signOut(); navigate({ to: "/auth" }); }}>
+            <span className="text-sm text-muted-foreground hidden sm:inline">{profile.email}</span>
+            <Button variant="outline" size="sm" className="rounded-xl transition-all duration-300 hover:scale-[1.02] hover:border-primary/40 hover:text-primary" onClick={() => { signOut(); navigate({ to: "/auth" }); }}>
               <LogOut className="mr-2 size-4" />Keluar
             </Button>
           </div>
@@ -66,14 +66,14 @@ function AdminDashboard() {
 
       <main className="container mx-auto px-6 py-8">
         <Tabs defaultValue="items">
-          <TabsList>
-            <TabsTrigger value="items"><Package className="mr-2 size-4" />Kelola Barang</TabsTrigger>
-            <TabsTrigger value="monitor"><AlertTriangle className="mr-2 size-4" />Monitoring & Notifikasi</TabsTrigger>
-            <TabsTrigger value="sales"><TrendingUp className="mr-2 size-4" />Analisis Penjualan</TabsTrigger>
+          <TabsList className="bg-white border border-zinc-200/70 rounded-2xl p-1.5 h-auto shadow-sm">
+            <TabsTrigger value="items" className="rounded-xl px-4 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md data-[state=active]:shadow-primary/20 transition-all duration-300"><Package className="mr-2 size-4" />Kelola Barang</TabsTrigger>
+            <TabsTrigger value="monitor" className="rounded-xl px-4 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md data-[state=active]:shadow-primary/20 transition-all duration-300"><AlertTriangle className="mr-2 size-4" />Monitoring & Notifikasi</TabsTrigger>
+            <TabsTrigger value="sales" className="rounded-xl px-4 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md data-[state=active]:shadow-primary/20 transition-all duration-300"><TrendingUp className="mr-2 size-4" />Analisis Penjualan</TabsTrigger>
           </TabsList>
-          <TabsContent value="items" className="mt-6"><ItemsTab /></TabsContent>
-          <TabsContent value="monitor" className="mt-6"><MonitorTab /></TabsContent>
-          <TabsContent value="sales" className="mt-6"><SalesTab /></TabsContent>
+          <TabsContent value="items" className="mt-8"><ItemsTab /></TabsContent>
+          <TabsContent value="monitor" className="mt-8"><MonitorTab /></TabsContent>
+          <TabsContent value="sales" className="mt-8"><SalesTab /></TabsContent>
         </Tabs>
       </main>
     </div>
