@@ -36,26 +36,26 @@ function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-2 flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <Smartphone className="size-6" />
+    <div className="min-h-screen flex items-center justify-center bg-zinc-50 px-4">
+      <Card className="w-full max-w-md rounded-2xl border-zinc-200/70 shadow-xl shadow-primary/5">
+        <CardHeader className="text-center pt-8">
+          <div className="mx-auto mb-3 flex size-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-md shadow-primary/30">
+            <Smartphone className="size-7" />
           </div>
-          <CardTitle>Konter Handphone</CardTitle>
+          <CardTitle className="text-2xl tracking-tight">Konter Handphone</CardTitle>
           <CardDescription>Masuk untuk mengakses sistem inventaris</CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={onSubmit} className="space-y-4">
+        <CardContent className="p-8 pt-4">
+          <form onSubmit={onSubmit} className="space-y-5">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="nama@toko.com" />
+              <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="nama@toko.com" className="rounded-xl h-11 border-zinc-200 focus-visible:ring-primary" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Kata Sandi</Label>
-              <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+              <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="rounded-xl h-11 border-zinc-200 focus-visible:ring-primary" />
             </div>
-            <Button type="submit" className="w-full" disabled={submitting}>
+            <Button type="submit" className="w-full h-11 rounded-xl shadow-md shadow-primary/30 transition-all duration-300 hover:scale-[1.01]" disabled={submitting}>
               {submitting && <Loader2 className="mr-2 size-4 animate-spin" />}
               Masuk
             </Button>

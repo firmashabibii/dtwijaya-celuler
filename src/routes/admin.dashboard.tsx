@@ -39,25 +39,25 @@ function AdminDashboard() {
   }, [loading, session, profile, navigate]);
 
   if (loading || !profile) {
-    return <div className="dark min-h-screen flex items-center justify-center bg-background"><Loader2 className="size-8 animate-spin text-primary" /></div>;
+    return <div className="min-h-screen flex items-center justify-center bg-background"><Loader2 className="size-8 animate-spin text-primary" /></div>;
   }
 
   return (
-    <div className="dark min-h-screen bg-background text-foreground">
-      <header className="border-b border-border bg-card sticky top-0 z-10">
-        <div className="container mx-auto flex items-center justify-between px-6 py-4">
+    <div className="min-h-screen bg-zinc-50 text-foreground">
+      <header className="border-b border-zinc-200/70 bg-white/80 backdrop-blur-lg sticky top-0 z-10">
+        <div className="container mx-auto flex items-center justify-between px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-lg bg-primary/15 text-primary">
+            <div className="flex size-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm shadow-primary/30">
               <Smartphone className="size-5" />
             </div>
             <div>
-              <h1 className="text-lg font-semibold">Dashboard Admin</h1>
+              <h1 className="text-lg font-semibold tracking-tight">Dashboard Admin</h1>
               <p className="text-xs text-muted-foreground">Konter Handphone</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-muted-foreground">{profile.email}</span>
-            <Button variant="outline" size="sm" onClick={() => { signOut(); navigate({ to: "/auth" }); }}>
+            <span className="text-sm text-muted-foreground hidden sm:inline">{profile.email}</span>
+            <Button variant="outline" size="sm" className="rounded-xl transition-all duration-300 hover:scale-[1.02] hover:border-primary/40 hover:text-primary" onClick={() => { signOut(); navigate({ to: "/auth" }); }}>
               <LogOut className="mr-2 size-4" />Keluar
             </Button>
           </div>
@@ -66,14 +66,14 @@ function AdminDashboard() {
 
       <main className="container mx-auto px-6 py-8">
         <Tabs defaultValue="items">
-          <TabsList>
-            <TabsTrigger value="items"><Package className="mr-2 size-4" />Kelola Barang</TabsTrigger>
-            <TabsTrigger value="monitor"><AlertTriangle className="mr-2 size-4" />Monitoring & Notifikasi</TabsTrigger>
-            <TabsTrigger value="sales"><TrendingUp className="mr-2 size-4" />Analisis Penjualan</TabsTrigger>
+          <TabsList className="bg-white border border-zinc-200/70 rounded-2xl p-1.5 h-auto shadow-sm">
+            <TabsTrigger value="items" className="rounded-xl px-4 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md data-[state=active]:shadow-primary/20 transition-all duration-300"><Package className="mr-2 size-4" />Kelola Barang</TabsTrigger>
+            <TabsTrigger value="monitor" className="rounded-xl px-4 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md data-[state=active]:shadow-primary/20 transition-all duration-300"><AlertTriangle className="mr-2 size-4" />Monitoring & Notifikasi</TabsTrigger>
+            <TabsTrigger value="sales" className="rounded-xl px-4 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md data-[state=active]:shadow-primary/20 transition-all duration-300"><TrendingUp className="mr-2 size-4" />Analisis Penjualan</TabsTrigger>
           </TabsList>
-          <TabsContent value="items" className="mt-6"><ItemsTab /></TabsContent>
-          <TabsContent value="monitor" className="mt-6"><MonitorTab /></TabsContent>
-          <TabsContent value="sales" className="mt-6"><SalesTab /></TabsContent>
+          <TabsContent value="items" className="mt-8"><ItemsTab /></TabsContent>
+          <TabsContent value="monitor" className="mt-8"><MonitorTab /></TabsContent>
+          <TabsContent value="sales" className="mt-8"><SalesTab /></TabsContent>
         </Tabs>
       </main>
     </div>
@@ -114,23 +114,24 @@ function ItemsTab() {
   });
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+    <Card className="rounded-2xl border-zinc-200/70 shadow-sm">
+      <CardHeader className="flex flex-row items-center justify-between p-6">
         <div>
-          <CardTitle>Daftar Barang</CardTitle>
+          <CardTitle className="text-xl tracking-tight">Daftar Barang</CardTitle>
           <CardDescription>Kelola spare part dan stok konter</CardDescription>
         </div>
-        <Button onClick={() => { setEditing(null); setOpen(true); }}>
+        <Button onClick={() => { setEditing(null); setOpen(true); }} className="rounded-xl shadow-sm shadow-primary/30 transition-all duration-300 hover:scale-[1.02]">
           <Plus className="mr-2 size-4" />Tambah Barang
         </Button>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-6 pt-0">
         {isLoading ? (
-          <div className="flex justify-center py-12"><Loader2 className="size-6 animate-spin" /></div>
+          <div className="flex justify-center py-12"><Loader2 className="size-6 animate-spin text-primary" /></div>
         ) : (
+          <div className="rounded-xl border border-zinc-200/70 overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="bg-zinc-50/80 hover:bg-zinc-50/80 border-zinc-200/70">
                 <TableHead>SKU</TableHead>
                 <TableHead>Nama</TableHead>
                 <TableHead>Kategori</TableHead>
@@ -148,26 +149,28 @@ function ItemsTab() {
                 const cat = categories.find(c => c.id === it.category_id);
                 const low = it.quantity <= it.min_stock;
                 return (
-                  <TableRow key={it.id}>
-                    <TableCell className="font-mono text-xs">{it.sku}</TableCell>
+                  <TableRow key={it.id} className="border-zinc-100 hover:bg-primary/[0.03] transition-colors duration-200">
+                    <TableCell className="font-mono text-xs text-muted-foreground">{it.sku}</TableCell>
                     <TableCell className="font-medium">{it.name}</TableCell>
-                    <TableCell>{cat?.name ?? "-"}</TableCell>
-                    <TableCell className="text-right">Rp {Number(it.price ?? 0).toLocaleString("id-ID")}</TableCell>
-                    <TableCell className="text-right">{it.quantity}</TableCell>
+                    <TableCell className="text-muted-foreground">{cat?.name ?? "-"}</TableCell>
+                    <TableCell className="text-right tabular-nums">Rp {Number(it.price ?? 0).toLocaleString("id-ID")}</TableCell>
+                    <TableCell className="text-right font-semibold tabular-nums">{it.quantity}</TableCell>
                     <TableCell>
-                      <Badge variant={low ? "destructive" : "default"} className={low ? "" : "bg-primary/20 text-primary hover:bg-primary/20"}>
-                        {low ? "Stok Menipis" : "Stok Aman"}
-                      </Badge>
+                      {low ? (
+                        <Badge variant="secondary" className="rounded-full bg-zinc-100 text-zinc-600 hover:bg-zinc-100 font-medium border-0">Stok Menipis</Badge>
+                      ) : (
+                        <Badge className="rounded-full bg-primary/10 text-primary hover:bg-primary/10 font-medium border-0">Stok Aman</Badge>
+                      )}
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-1">
-                        <Button variant="ghost" size="icon" onClick={() => setBarcodeFor(it)} title="Cetak Barcode">
+                        <Button variant="ghost" size="icon" className="rounded-lg hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => setBarcodeFor(it)} title="Cetak Barcode">
                           <Barcode className="size-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => { setEditing(it); setOpen(true); }} title="Edit">
+                        <Button variant="ghost" size="icon" className="rounded-lg hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => { setEditing(it); setOpen(true); }} title="Edit">
                           <Pencil className="size-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => { if (confirm(`Hapus ${it.name}?`)) del.mutate(it.id); }} title="Hapus">
+                        <Button variant="ghost" size="icon" className="rounded-lg hover:bg-destructive/10 transition-colors" onClick={() => { if (confirm(`Hapus ${it.name}?`)) del.mutate(it.id); }} title="Hapus">
                           <Trash2 className="size-4 text-destructive" />
                         </Button>
                       </div>
@@ -177,6 +180,7 @@ function ItemsTab() {
               })}
             </TableBody>
           </Table>
+          </div>
         )}
       </CardContent>
       <ItemDialog open={open} onOpenChange={setOpen} editing={editing} categories={categories} />
@@ -292,37 +296,37 @@ function MonitorTab() {
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2"><AlertTriangle className="size-5 text-destructive" />Barang Stok Menipis</CardTitle>
+      <Card className="rounded-2xl border-zinc-200/70 shadow-sm">
+        <CardHeader className="p-6">
+          <CardTitle className="flex items-center gap-2 text-lg tracking-tight"><span className="flex size-9 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600"><AlertTriangle className="size-4" /></span>Barang Stok Menipis</CardTitle>
           <CardDescription>{low.length} item perlu restock</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6 pt-0">
           {low.length === 0 ? <p className="text-sm text-muted-foreground py-4">Semua stok aman.</p> : (
             <ul className="space-y-2">
               {low.map(i => (
-                <li key={i.id} className="flex justify-between rounded-md border border-border bg-muted/30 p-3">
+                <li key={i.id} className="flex justify-between items-center rounded-xl border border-zinc-100 bg-zinc-50/60 p-4 transition-colors hover:bg-primary/[0.04]">
                   <div><p className="font-medium">{i.name}</p><p className="text-xs text-muted-foreground font-mono">{i.sku}</p></div>
-                  <Badge variant="destructive">{i.quantity} / min {i.min_stock}</Badge>
+                  <Badge className="rounded-full bg-zinc-200 text-zinc-700 hover:bg-zinc-200 border-0 font-medium">{i.quantity} / min {i.min_stock}</Badge>
                 </li>
               ))}
             </ul>
           )}
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2"><Bell className="size-5 text-primary" />Notifikasi</CardTitle>
+      <Card className="rounded-2xl border-zinc-200/70 shadow-sm">
+        <CardHeader className="p-6">
+          <CardTitle className="flex items-center gap-2 text-lg tracking-tight"><span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary"><Bell className="size-4" /></span>Notifikasi</CardTitle>
           <CardDescription>Peringatan terbaru dari sistem</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6 pt-0">
           {notifs.length === 0 ? <p className="text-sm text-muted-foreground py-4">Belum ada notifikasi.</p> : (
             <ul className="space-y-2">
               {notifs.map(n => (
-                <li key={n.id} className="rounded-md border border-border bg-muted/30 p-3">
+                <li key={n.id} className="rounded-xl border border-zinc-100 bg-zinc-50/60 p-4">
                   <p className="font-medium text-sm">{n.title}</p>
                   <p className="text-xs text-muted-foreground mt-1">{n.message}</p>
-                  <p className="text-[10px] text-muted-foreground mt-1">{new Date(n.created_at).toLocaleString("id-ID")}</p>
+                  <p className="text-[10px] text-muted-foreground mt-2">{new Date(n.created_at).toLocaleString("id-ID")}</p>
                 </li>
               ))}
             </ul>
@@ -367,51 +371,63 @@ function SalesTab() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card><CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Total Pendapatan</CardTitle><DollarSign className="size-4 text-primary" />
-        </CardHeader><CardContent><div className="text-2xl font-bold">Rp {totals.revenue.toLocaleString("id-ID")}</div></CardContent></Card>
-        <Card><CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Total Item Terjual</CardTitle><Package className="size-4 text-primary" />
-        </CardHeader><CardContent><div className="text-2xl font-bold">{totals.items}</div></CardContent></Card>
-        <Card><CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Hari Tercatat</CardTitle><TrendingUp className="size-4 text-primary" />
-        </CardHeader><CardContent><div className="text-2xl font-bold">{byDate.length}</div></CardContent></Card>
+      <div className="grid gap-5 md:grid-cols-3">
+        <Card className="rounded-2xl border-zinc-200/70 shadow-sm bg-gradient-to-br from-white to-primary/[0.03] transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+          <CardHeader className="flex flex-row items-center justify-between p-6 pb-2">
+            <CardTitle className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Total Pendapatan</CardTitle>
+            <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><DollarSign className="size-5" /></span>
+          </CardHeader>
+          <CardContent className="p-6 pt-2"><div className="text-3xl font-bold tracking-tight tabular-nums">Rp {totals.revenue.toLocaleString("id-ID")}</div></CardContent>
+        </Card>
+        <Card className="rounded-2xl border-zinc-200/70 shadow-sm bg-gradient-to-br from-white to-primary/[0.03] transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+          <CardHeader className="flex flex-row items-center justify-between p-6 pb-2">
+            <CardTitle className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Total Item Terjual</CardTitle>
+            <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><Package className="size-5" /></span>
+          </CardHeader>
+          <CardContent className="p-6 pt-2"><div className="text-3xl font-bold tracking-tight tabular-nums">{totals.items}</div></CardContent>
+        </Card>
+        <Card className="rounded-2xl border-zinc-200/70 shadow-sm bg-gradient-to-br from-white to-primary/[0.03] transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+          <CardHeader className="flex flex-row items-center justify-between p-6 pb-2">
+            <CardTitle className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Hari Tercatat</CardTitle>
+            <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><TrendingUp className="size-5" /></span>
+          </CardHeader>
+          <CardContent className="p-6 pt-2"><div className="text-3xl font-bold tracking-tight tabular-nums">{byDate.length}</div></CardContent>
+        </Card>
       </div>
 
-      <Card>
-        <CardHeader><CardTitle>Tren Penjualan Harian</CardTitle><CardDescription>Pendapatan per hari</CardDescription></CardHeader>
-        <CardContent className="h-[320px]">
-          {isLoading ? <div className="flex h-full items-center justify-center"><Loader2 className="size-6 animate-spin" /></div> :
+      <Card className="rounded-2xl border-zinc-200/70 shadow-sm">
+        <CardHeader className="p-6"><CardTitle className="text-lg tracking-tight">Tren Penjualan Harian</CardTitle><CardDescription>Pendapatan per hari</CardDescription></CardHeader>
+        <CardContent className="h-[340px] p-6 pt-0">
+          {isLoading ? <div className="flex h-full items-center justify-center"><Loader2 className="size-6 animate-spin text-primary" /></div> :
             byDate.length === 0 ? <p className="text-sm text-muted-foreground text-center py-12">Belum ada data penjualan.</p> :
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={byDate}>
+              <AreaChart data={byDate} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
                 <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="oklch(0.7 0.18 160)" stopOpacity={0.6} />
-                  <stop offset="100%" stopColor="oklch(0.7 0.18 160)" stopOpacity={0} />
+                  <stop offset="0%" stopColor="oklch(0.55 0.22 258)" stopOpacity={0.35} />
+                  <stop offset="100%" stopColor="oklch(0.55 0.22 258)" stopOpacity={0} />
                 </linearGradient></defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="oklch(1 0 0 / 0.08)" />
-                <XAxis dataKey="date" stroke="oklch(0.7 0.04 256)" fontSize={12} />
-                <YAxis stroke="oklch(0.7 0.04 256)" fontSize={12} />
-                <Tooltip contentStyle={{ background: "oklch(0.2 0.04 265)", border: "1px solid oklch(1 0 0 / 0.1)", borderRadius: 8 }} />
-                <Area type="monotone" dataKey="revenue" stroke="oklch(0.7 0.18 160)" fill="url(#g)" strokeWidth={2} />
+                <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.9 0.005 250)" vertical={false} />
+                <XAxis dataKey="date" stroke="oklch(0.55 0.015 250)" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="oklch(0.55 0.015 250)" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip contentStyle={{ background: "white", border: "1px solid oklch(0.93 0.006 250)", borderRadius: 12, boxShadow: "0 8px 24px -8px oklch(0.55 0.22 258 / 0.2)" }} labelStyle={{ color: "oklch(0.16 0.01 250)", fontWeight: 600 }} itemStyle={{ color: "oklch(0.55 0.22 258)" }} />
+                <Area type="monotone" dataKey="revenue" stroke="oklch(0.55 0.22 258)" fill="url(#g)" strokeWidth={2.5} />
               </AreaChart>
             </ResponsiveContainer>
           }
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader><CardTitle>Barang Terlaris</CardTitle><CardDescription>Total item terjual per produk</CardDescription></CardHeader>
-        <CardContent className="h-[320px]">
+      <Card className="rounded-2xl border-zinc-200/70 shadow-sm">
+        <CardHeader className="p-6"><CardTitle className="text-lg tracking-tight">Barang Terlaris</CardTitle><CardDescription>Total item terjual per produk</CardDescription></CardHeader>
+        <CardContent className="h-[340px] p-6 pt-0">
           {byItem.length === 0 ? <p className="text-sm text-muted-foreground text-center py-12">Belum ada data.</p> :
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={byItem}>
-                <CartesianGrid strokeDasharray="3 3" stroke="oklch(1 0 0 / 0.08)" />
-                <XAxis dataKey="name" stroke="oklch(0.7 0.04 256)" fontSize={11} />
-                <YAxis stroke="oklch(0.7 0.04 256)" fontSize={12} />
-                <Tooltip contentStyle={{ background: "oklch(0.2 0.04 265)", border: "1px solid oklch(1 0 0 / 0.1)", borderRadius: 8 }} />
-                <Bar dataKey="qty" fill="oklch(0.7 0.18 160)" radius={[6, 6, 0, 0]} />
+              <BarChart data={byItem} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.9 0.005 250)" vertical={false} />
+                <XAxis dataKey="name" stroke="oklch(0.55 0.015 250)" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="oklch(0.55 0.015 250)" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip cursor={{ fill: "oklch(0.55 0.22 258 / 0.06)" }} contentStyle={{ background: "white", border: "1px solid oklch(0.93 0.006 250)", borderRadius: 12, boxShadow: "0 8px 24px -8px oklch(0.55 0.22 258 / 0.2)" }} labelStyle={{ color: "oklch(0.16 0.01 250)", fontWeight: 600 }} itemStyle={{ color: "oklch(0.55 0.22 258)" }} />
+                <Bar dataKey="qty" fill="oklch(0.55 0.22 258)" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           }
