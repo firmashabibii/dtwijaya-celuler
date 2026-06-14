@@ -34,25 +34,30 @@ function StaffCounter() {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30">
-      <div className="mx-auto max-w-md bg-background min-h-screen shadow-sm">
-        <header className="sticky top-0 z-10 bg-primary text-primary-foreground px-4 py-3 flex items-center justify-between">
-          <div>
-            <h1 className="font-semibold">Kasir Staf</h1>
-            <p className="text-xs opacity-80">{profile.email}</p>
+    <div className="min-h-screen bg-zinc-100">
+      <div className="mx-auto max-w-md bg-white min-h-screen shadow-xl shadow-zinc-300/30">
+        <header className="sticky top-0 z-10 bg-white border-b border-zinc-100 px-5 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex size-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm shadow-primary/30">
+              <ShoppingCart className="size-5" />
+            </div>
+            <div>
+              <h1 className="font-semibold tracking-tight text-zinc-950">Kasir Staf</h1>
+              <p className="text-xs text-muted-foreground truncate max-w-[180px]">{profile.email}</p>
+            </div>
           </div>
-          <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-primary-foreground/10" onClick={() => { signOut(); navigate({ to: "/auth" }); }}>
-            <LogOut className="size-4" />
+          <Button variant="ghost" size="icon" className="rounded-xl text-zinc-600 hover:bg-zinc-100 transition-colors" onClick={() => { signOut(); navigate({ to: "/auth" }); }}>
+            <LogOut className="size-5" />
           </Button>
         </header>
 
         <Tabs defaultValue="scan" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 rounded-none">
-            <TabsTrigger value="scan"><ShoppingCart className="mr-2 size-4" />Transaksi</TabsTrigger>
-            <TabsTrigger value="stock"><Package className="mr-2 size-4" />Lihat Stok</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 rounded-none bg-white border-b border-zinc-100 h-auto p-0">
+            <TabsTrigger value="scan" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none py-3.5 font-medium transition-colors"><ShoppingCart className="mr-2 size-4" />Transaksi</TabsTrigger>
+            <TabsTrigger value="stock" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none py-3.5 font-medium transition-colors"><Package className="mr-2 size-4" />Lihat Stok</TabsTrigger>
           </TabsList>
-          <TabsContent value="scan" className="p-4"><TransaksiTab /></TabsContent>
-          <TabsContent value="stock" className="p-4"><StockTab /></TabsContent>
+          <TabsContent value="scan" className="p-5"><TransaksiTab /></TabsContent>
+          <TabsContent value="stock" className="p-5"><StockTab /></TabsContent>
         </Tabs>
       </div>
     </div>
