@@ -197,13 +197,24 @@ function ScannerOverlay({ onClose, onDecode }: { onClose: () => void; onDecode: 
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black flex flex-col">
-      <div className="flex justify-between items-center p-4 text-white">
-        <span className="font-medium">Scan Barcode</span>
-        <Button size="icon" variant="ghost" className="text-white hover:bg-white/10" onClick={onClose}><X /></Button>
+    <div className="fixed inset-0 z-50 bg-zinc-950 flex flex-col">
+      <div className="flex justify-between items-center p-5 text-white">
+        <span className="font-semibold tracking-tight">Scan Barcode</span>
+        <Button size="icon" variant="ghost" className="rounded-xl text-white hover:bg-white/10" onClick={onClose}><X /></Button>
       </div>
-      <div ref={ref} className="flex-1" />
-      <p className="text-white/70 text-center text-sm p-4">Arahkan kamera ke barcode produk</p>
+      <div className="relative flex-1">
+        <div ref={ref} className="absolute inset-0" />
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="relative w-[280px] h-[180px] rounded-2xl border-2 border-primary/80 shadow-[0_0_0_9999px_oklch(0.16_0.01_250/0.55)]">
+            <span className="absolute -top-px -left-px size-6 border-t-4 border-l-4 border-primary rounded-tl-2xl" />
+            <span className="absolute -top-px -right-px size-6 border-t-4 border-r-4 border-primary rounded-tr-2xl" />
+            <span className="absolute -bottom-px -left-px size-6 border-b-4 border-l-4 border-primary rounded-bl-2xl" />
+            <span className="absolute -bottom-px -right-px size-6 border-b-4 border-r-4 border-primary rounded-br-2xl" />
+            <div className="scan-line absolute left-2 right-2 top-1/2 h-[3px] rounded-full bg-primary shadow-[0_0_12px_oklch(0.55_0.22_258)]" />
+          </div>
+        </div>
+      </div>
+      <p className="text-white/70 text-center text-sm p-5">Arahkan kamera ke barcode produk</p>
     </div>
   );
 }
