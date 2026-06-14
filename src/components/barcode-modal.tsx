@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-// @ts-expect-error - bwip-js types
 import bwipjs from "bwip-js/browser";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
