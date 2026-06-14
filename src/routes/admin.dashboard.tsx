@@ -342,7 +342,7 @@ function SalesTab() {
     queryFn: async () => {
       const { data, error } = await supabase.from("sales_analytics" as any).select("*").order("sale_date", { ascending: true });
       if (error) throw error;
-      return data as SalesRow[];
+      return (data ?? []) as unknown as SalesRow[];
     },
   });
 

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import bwipjs from "bwip-js";
+// @ts-expect-error - bwip-js types
+import bwipjs from "bwip-js/browser";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Printer } from "lucide-react";
