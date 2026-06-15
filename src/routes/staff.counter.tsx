@@ -174,7 +174,7 @@ function TransaksiTab() {
         </Card>
 
         {cart.length > 0 && (
-          <div className="sticky bottom-0 -mx-5 border-t border-zinc-100 bg-white/95 backdrop-blur p-5 space-y-3 lg:mx-0 lg:rounded-2xl lg:border lg:border-zinc-200/70 lg:shadow-sm">
+          <div className="sticky bottom-0 -mx-6 border-t border-zinc-100 bg-white/95 backdrop-blur p-6 space-y-3 lg:mx-0 lg:rounded-2xl lg:border lg:border-zinc-200/70 lg:shadow-sm">
             <div className="flex justify-between items-baseline">
               <span className="text-sm text-muted-foreground uppercase tracking-wider font-medium">Total</span>
               <span className="text-2xl font-bold tracking-tight tabular-nums">Rp {total.toLocaleString("id-ID")}</span>
