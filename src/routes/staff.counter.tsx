@@ -34,9 +34,9 @@ function StaffCounter() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-100">
-      <div className="mx-auto max-w-5xl bg-white min-h-screen shadow-xl shadow-zinc-300/30">
-        <header className="sticky top-0 z-10 bg-white border-b border-zinc-100 px-5 py-4 flex items-center justify-between">
+    <Tabs defaultValue="scan" className="w-full min-h-screen bg-zinc-50 pb-16">
+      <header className="sticky top-0 z-10 w-full bg-white border-b border-zinc-200/80 shadow-sm">
+        <div className="mx-auto max-w-7xl w-full px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm shadow-primary/30">
               <ShoppingCart className="size-5" />
@@ -49,18 +49,28 @@ function StaffCounter() {
           <Button variant="ghost" size="icon" className="rounded-xl text-zinc-600 hover:bg-zinc-100 transition-colors" onClick={() => { signOut(); navigate({ to: "/auth" }); }}>
             <LogOut className="size-5" />
           </Button>
-        </header>
-
-        <Tabs defaultValue="scan" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 rounded-none bg-white border-b border-zinc-100 h-auto p-0">
+        </div>
+        <div className="mx-auto max-w-7xl w-full px-6">
+          <TabsList className="grid w-full grid-cols-2 rounded-none bg-transparent h-auto p-0">
             <TabsTrigger value="scan" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none py-3.5 font-medium transition-colors"><ShoppingCart className="mr-2 size-4" />Transaksi</TabsTrigger>
             <TabsTrigger value="stock" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none py-3.5 font-medium transition-colors"><Package className="mr-2 size-4" />Lihat Stok</TabsTrigger>
           </TabsList>
-          <TabsContent value="scan" className="p-5"><TransaksiTab /></TabsContent>
-          <TabsContent value="stock" className="p-5"><StockTab /></TabsContent>
-        </Tabs>
-      </div>
-    </div>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-7xl w-full px-6 mt-8">
+        <TabsContent value="scan">
+          <div className="bg-white rounded-2xl shadow-xl p-6">
+            <TransaksiTab />
+          </div>
+        </TabsContent>
+        <TabsContent value="stock">
+          <div className="bg-white rounded-2xl shadow-xl p-6">
+            <StockTab />
+          </div>
+        </TabsContent>
+      </main>
+    </Tabs>
   );
 }
 
@@ -164,7 +174,7 @@ function TransaksiTab() {
         </Card>
 
         {cart.length > 0 && (
-          <div className="sticky bottom-0 -mx-5 border-t border-zinc-100 bg-white/95 backdrop-blur p-5 space-y-3 lg:mx-0 lg:rounded-2xl lg:border lg:border-zinc-200/70 lg:shadow-sm">
+          <div className="sticky bottom-0 -mx-6 border-t border-zinc-100 bg-white/95 backdrop-blur p-6 space-y-3 lg:mx-0 lg:rounded-2xl lg:border lg:border-zinc-200/70 lg:shadow-sm">
             <div className="flex justify-between items-baseline">
               <span className="text-sm text-muted-foreground uppercase tracking-wider font-medium">Total</span>
               <span className="text-2xl font-bold tracking-tight tabular-nums">Rp {total.toLocaleString("id-ID")}</span>
