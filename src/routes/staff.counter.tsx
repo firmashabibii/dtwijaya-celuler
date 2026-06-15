@@ -35,7 +35,7 @@ function StaffCounter() {
 
   return (
     <div className="min-h-screen bg-zinc-100">
-      <div className="mx-auto max-w-md bg-white min-h-screen shadow-xl shadow-zinc-300/30">
+      <div className="mx-auto max-w-5xl bg-white min-h-screen shadow-xl shadow-zinc-300/30">
         <header className="sticky top-0 z-10 bg-white border-b border-zinc-100 px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm shadow-primary/30">
