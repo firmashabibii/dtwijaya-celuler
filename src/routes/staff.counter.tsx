@@ -5,9 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Camera, Plus, Minus, Trash2, LogOut, ShoppingCart, Package, Loader2, X, Check } from "lucide-react";
+import { Camera, Plus, Minus, Trash2, LogOut, ShoppingCart, Package, Loader2, X, Check, User } from "lucide-react";
 import { toast } from "sonner";
 import { Html5Qrcode } from "html5-qrcode";
 
@@ -34,47 +33,56 @@ function StaffCounter() {
   }
 
   return (
-    <Tabs defaultValue="scan" className="w-full min-h-screen bg-zinc-50 pb-16">
-      <header className="sticky top-0 z-10 w-full bg-white border-b border-zinc-200/80 shadow-sm">
-        <div className="mx-auto max-w-7xl w-full px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-zinc-100">
+      {/* Sleek single-row navbar */}
+      <header className="sticky top-0 z-10 w-full h-16 bg-white border-b border-zinc-200 shadow-sm">
+        <div className="mx-auto max-w-7xl w-full px-8 h-full flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm shadow-primary/30">
-              <ShoppingCart className="size-5" />
+              <User className="size-5" />
             </div>
             <div>
               <h1 className="font-semibold tracking-tight text-zinc-950">Kasir Staf</h1>
-              <p className="text-xs text-muted-foreground truncate max-w-[180px]">{profile.email}</p>
+              <p className="text-xs text-muted-foreground truncate max-w-[200px]">{profile.email}</p>
             </div>
           </div>
           <Button variant="ghost" size="icon" className="rounded-xl text-zinc-600 hover:bg-zinc-100 transition-colors" onClick={() => { signOut(); navigate({ to: "/auth" }); }}>
             <LogOut className="size-5" />
           </Button>
         </div>
-        <div className="mx-auto max-w-7xl w-full px-6">
-          <TabsList className="grid w-full grid-cols-2 rounded-none bg-transparent h-auto p-0">
-            <TabsTrigger value="scan" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none py-3.5 font-medium transition-colors"><ShoppingCart className="mr-2 size-4" />Transaksi</TabsTrigger>
-            <TabsTrigger value="stock" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none py-3.5 font-medium transition-colors"><Package className="mr-2 size-4" />Lihat Stok</TabsTrigger>
-          </TabsList>
-        </div>
       </header>
 
-      <main className="mx-auto max-w-7xl w-full px-6 mt-8">
-        <TabsContent value="scan">
-          <div className="bg-white rounded-2xl shadow-xl p-6">
-            <TransaksiTab />
+      {/* Main workspace */}
+      <main className="max-w-7xl mx-auto w-full px-6 pt-8 pb-16">
+        <div className="grid gap-6 lg:grid-cols-12">
+          {/* Left Column — Transaction */}
+          <div className="lg:col-span-8 space-y-6">
+            <div className="flex items-center gap-2">
+              <ShoppingCart className="size-5 text-primary" />
+              <h2 className="text-lg font-semibold tracking-tight text-zinc-950">Transaksi Penjualan</h2>
+            </div>
+            <div className="bg-white rounded-2xl shadow-xl border border-zinc-200/60 p-6">
+              <TransaksiSection />
+            </div>
           </div>
-        </TabsContent>
-        <TabsContent value="stock">
-          <div className="bg-white rounded-2xl shadow-xl p-6">
-            <StockTab />
+
+          {/* Right Column — Stock Info */}
+          <div className="lg:col-span-4 space-y-6">
+            <div className="flex items-center gap-2">
+              <Package className="size-5 text-primary" />
+              <h2 className="text-lg font-semibold tracking-tight text-zinc-950">Informasi Stok Barang</h2>
+            </div>
+            <div className="bg-white rounded-2xl shadow-xl border border-zinc-200/60 p-6">
+              <StockSection />
+            </div>
           </div>
-        </TabsContent>
+        </div>
       </main>
-    </Tabs>
+    </div>
   );
 }
 
-function TransaksiTab() {
+function TransaksiSection() {
   const qc = useQueryClient();
   const [scanning, setScanning] = useState(false);
   const [cart, setCart] = useState<CartLine[]>([]);
@@ -112,7 +120,6 @@ function TransaksiTab() {
 
   const checkout = useMutation({
     mutationFn: async () => {
-      // re-validate
       for (const line of cart) {
         const { data, error } = await supabase.from("items").select("quantity,name").eq("id", line.item.id).single();
         if (error) throw error;
@@ -134,58 +141,54 @@ function TransaksiTab() {
   const total = cart.reduce((s, c) => s + (Number(c.item.price ?? 0) * c.qty), 0);
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_1.1fr]">
-      <div className="space-y-5">
-        <Button size="lg" className="pulse-ring w-full h-24 text-lg rounded-2xl shadow-md shadow-primary/30 transition-all duration-300 active:scale-[0.98]" onClick={() => setScanning(true)}>
-          <Camera className="mr-3 size-7" />Buka Kamera Scan
-        </Button>
+    <div className="space-y-5">
+      <Button size="lg" className="pulse-ring w-full h-24 text-lg rounded-2xl shadow-md shadow-primary/30 transition-all duration-300 active:scale-[0.98]" onClick={() => setScanning(true)}>
+        <Camera className="mr-3 size-7" />Buka Kamera Scan
+      </Button>
 
-        <form onSubmit={(e) => { e.preventDefault(); findAndAdd(manualSku); setManualSku(""); }} className="flex gap-2">
-          <Input className="rounded-xl h-12 border-zinc-200 focus-visible:ring-primary" placeholder="atau ketik SKU manual" value={manualSku} onChange={(e) => setManualSku(e.target.value)} />
-          <Button type="submit" variant="outline" className="rounded-xl h-12 px-5 border-zinc-200 hover:border-primary hover:text-primary transition-all">Tambah</Button>
-        </form>
+      <form onSubmit={(e) => { e.preventDefault(); findAndAdd(manualSku); setManualSku(""); }} className="flex gap-2">
+        <Input className="rounded-xl h-12 border-zinc-200 focus-visible:ring-primary" placeholder="atau ketik SKU manual" value={manualSku} onChange={(e) => setManualSku(e.target.value)} />
+        <Button type="submit" variant="outline" className="rounded-xl h-12 px-5 border-zinc-200 hover:border-primary hover:text-primary transition-all">Tambah</Button>
+      </form>
 
-        {scanning && <ScannerOverlay onClose={() => setScanning(false)} onDecode={(t) => { setScanning(false); findAndAdd(t); }} />}
-      </div>
+      {scanning && <ScannerOverlay onClose={() => setScanning(false)} onDecode={(t) => { setScanning(false); findAndAdd(t); }} />}
 
-      <div className="space-y-5">
-        <Card className="rounded-2xl border-zinc-200/70 shadow-sm">
-          <CardHeader className="p-5 pb-3"><CardTitle className="text-base tracking-tight">Keranjang <span className="text-muted-foreground font-normal">({cart.length})</span></CardTitle></CardHeader>
-          <CardContent className="space-y-2 p-5 pt-0">
-            {cart.length === 0 && <p className="text-sm text-muted-foreground text-center py-10">Scan barang untuk memulai</p>}
-            {cart.map(c => (
-              <div key={c.item.sku} className="flex items-center justify-between gap-2 rounded-xl border border-zinc-100 bg-zinc-50/60 p-3 transition-colors hover:border-primary/30">
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium truncate text-zinc-950">{c.item.name}</p>
-                  <p className="text-xs text-muted-foreground font-mono">{c.item.sku}</p>
-                  <p className="text-xs text-primary font-semibold mt-0.5">Rp {Number(c.item.price ?? 0).toLocaleString("id-ID")}</p>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Button size="icon" variant="outline" className="size-9 rounded-lg border-zinc-200" onClick={() => changeQty(c.item.sku, -1)}><Minus className="size-3" /></Button>
-                  <span className="w-8 text-center font-semibold tabular-nums">{c.qty}</span>
-                  <Button size="icon" variant="outline" className="size-9 rounded-lg border-zinc-200" onClick={() => changeQty(c.item.sku, +1)}><Plus className="size-3" /></Button>
-                  <Button size="icon" variant="ghost" className="size-9 rounded-lg" onClick={() => setCart(cart.filter(x => x.item.sku !== c.item.sku))}>
-                    <Trash2 className="size-3 text-destructive" />
-                  </Button>
-                </div>
+      <Card className="rounded-2xl border-zinc-200/70 shadow-sm">
+        <CardHeader className="p-5 pb-3"><CardTitle className="text-base tracking-tight">Keranjang <span className="text-muted-foreground font-normal">({cart.length})</span></CardTitle></CardHeader>
+        <CardContent className="space-y-2 p-5 pt-0">
+          {cart.length === 0 && <p className="text-sm text-muted-foreground text-center py-10">Scan barang untuk memulai</p>}
+          {cart.map(c => (
+            <div key={c.item.sku} className="flex items-center justify-between gap-2 rounded-xl border border-zinc-100 bg-zinc-50/60 p-3 transition-colors hover:border-primary/30">
+              <div className="min-w-0 flex-1">
+                <p className="font-medium truncate text-zinc-950">{c.item.name}</p>
+                <p className="text-xs text-muted-foreground font-mono">{c.item.sku}</p>
+                <p className="text-xs text-primary font-semibold mt-0.5">Rp {Number(c.item.price ?? 0).toLocaleString("id-ID")}</p>
               </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        {cart.length > 0 && (
-          <div className="sticky bottom-0 -mx-6 border-t border-zinc-100 bg-white/95 backdrop-blur p-6 space-y-3 lg:mx-0 lg:rounded-2xl lg:border lg:border-zinc-200/70 lg:shadow-sm">
-            <div className="flex justify-between items-baseline">
-              <span className="text-sm text-muted-foreground uppercase tracking-wider font-medium">Total</span>
-              <span className="text-2xl font-bold tracking-tight tabular-nums">Rp {total.toLocaleString("id-ID")}</span>
+              <div className="flex items-center gap-1">
+                <Button size="icon" variant="outline" className="size-9 rounded-lg border-zinc-200" onClick={() => changeQty(c.item.sku, -1)}><Minus className="size-3" /></Button>
+                <span className="w-8 text-center font-semibold tabular-nums">{c.qty}</span>
+                <Button size="icon" variant="outline" className="size-9 rounded-lg border-zinc-200" onClick={() => changeQty(c.item.sku, +1)}><Plus className="size-3" /></Button>
+                <Button size="icon" variant="ghost" className="size-9 rounded-lg" onClick={() => setCart(cart.filter(x => x.item.sku !== c.item.sku))}>
+                  <Trash2 className="size-3 text-destructive" />
+                </Button>
+              </div>
             </div>
-            <Button size="lg" className="w-full h-14 text-base rounded-2xl shadow-md shadow-primary/30 transition-all duration-300 active:scale-[0.98]" onClick={() => checkout.mutate()} disabled={checkout.isPending}>
-              {checkout.isPending ? <Loader2 className="mr-2 size-5 animate-spin" /> : <Check className="mr-2 size-5" />}
-              Konfirmasi Pembelian
-            </Button>
+          ))}
+        </CardContent>
+      </Card>
+
+      {cart.length > 0 && (
+        <div className="border-t border-zinc-100 bg-white/95 backdrop-blur p-6 space-y-3 rounded-2xl border border-zinc-200/70 shadow-sm">
+          <div className="flex justify-between items-baseline">
+            <span className="text-sm text-muted-foreground uppercase tracking-wider font-medium">Total</span>
+            <span className="text-2xl font-bold tracking-tight tabular-nums">Rp {total.toLocaleString("id-ID")}</span>
           </div>
-        )}
-      </div>
+          <Button size="lg" className="w-full h-14 text-base rounded-2xl shadow-md shadow-primary/30 transition-all duration-300 active:scale-[0.98]" onClick={() => checkout.mutate()} disabled={checkout.isPending}>
+            {checkout.isPending ? <Loader2 className="mr-2 size-5 animate-spin" /> : <Check className="mr-2 size-5" />}
+            Konfirmasi Pembelian
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
@@ -233,7 +236,7 @@ function ScannerOverlay({ onClose, onDecode }: { onClose: () => void; onDecode: 
   );
 }
 
-function StockTab() {
+function StockSection() {
   const [q, setQ] = useState("");
   const { data: items = [], isLoading } = useQuery({
     queryKey: ["stock-list"],
