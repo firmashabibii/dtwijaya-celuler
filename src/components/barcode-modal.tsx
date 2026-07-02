@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useCallback } from "react";
 import bwipjs from "bwip-js/browser";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogPortal } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Printer } from "lucide-react";
 
@@ -12,32 +12,50 @@ interface Props {
 }
 
 export function BarcodeModal({ open, onOpenChange, sku, name }: Props) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const printRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (!open || !sku) return;
-    const draw = (c: HTMLCanvasElement | null, scale: number, height: number) => {
-      if (!c) return;
+  // Use useCallback ref to guarantee canvas rendering once the element mounts in the DOM
+  const canvasRef = useCallback((node: HTMLCanvasElement | null) => {
+    if (node && sku) {
       try {
-        bwipjs.toCanvas(c, {
-          bcid: "code128", text: sku, scale, height, includetext: true, textxalign: "center",
+        bwipjs.toCanvas(node, {
+          bcid: "code128",
+          text: sku,
+          scale: 2,
+          height: 12,
+          includetext: true,
+          textxalign: "center",
         });
-      } catch (e) { console.error(e); }
-    };
-    draw(canvasRef.current, 3, 12);
-    draw(printRef.current, 2, 10);
-  }, [open, sku]);
+      } catch (e) {
+        console.error("Gagal menggambar barcode:", e);
+      }
+    }
+  }, [sku]);
+
+  const printCanvasRef = useCallback((node: HTMLCanvasElement | null) => {
+    if (node && sku) {
+      try {
+        bwipjs.toCanvas(node, {
+          bcid: "code128",
+          text: sku,
+          scale: 2,
+          height: 10,
+          includetext: true,
+          textxalign: "center",
+        });
+      } catch (e) {
+        console.error("Gagal menggambar barcode cetak:", e);
+      }
+    }
+  }, [sku]);
 
   const print = () => window.print();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md print:hidden">
+      <DialogContent className="sm:max-w-md print:hidden overflow-hidden">
         <DialogHeader><DialogTitle>Barcode Label — {name}</DialogTitle></DialogHeader>
-        <div className="flex flex-col items-center gap-2 py-4">
-          <canvas ref={canvasRef} />
-          <p className="text-sm text-muted-foreground">{sku}</p>
+        <div className="flex flex-col items-center justify-center gap-2 py-4 w-full max-w-full overflow-hidden">
+          <canvas ref={canvasRef} className="max-w-full h-auto object-contain mx-auto" />
+          <p className="text-sm text-muted-foreground mt-1">{sku}</p>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Tutup</Button>
@@ -45,10 +63,12 @@ export function BarcodeModal({ open, onOpenChange, sku, name }: Props) {
         </DialogFooter>
       </DialogContent>
       {open && (
-        <div className="print-label hidden print:block">
-          <div className="label-name">{name}</div>
-          <canvas ref={printRef} />
-        </div>
+        <DialogPortal>
+          <div className="print-label">
+            <div className="label-name">{name}</div>
+            <canvas ref={printCanvasRef} />
+          </div>
+        </DialogPortal>
       )}
     </Dialog>
   );

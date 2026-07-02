@@ -62,39 +62,39 @@
 }
 
 :root {
-  --radius: 1rem;
-  --background: oklch(0.99 0.002 250);
-  --foreground: oklch(0.16 0.01 250);
+  --radius: 0.75rem;
+  --background: oklch(0.975 0.004 230);
+  --foreground: oklch(0.16 0.025 240);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.16 0.01 250);
+  --card-foreground: oklch(0.16 0.025 240);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.16 0.01 250);
-  --primary: oklch(0.55 0.22 258);
+  --popover-foreground: oklch(0.16 0.025 240);
+  --primary: oklch(0.50 0.18 240);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.97 0.005 250);
-  --secondary-foreground: oklch(0.2 0.02 250);
-  --muted: oklch(0.97 0.005 250);
-  --muted-foreground: oklch(0.5 0.015 250);
-  --accent: oklch(0.95 0.03 258);
-  --accent-foreground: oklch(0.35 0.18 258);
-  --destructive: oklch(0.6 0.22 25);
+  --secondary: oklch(0.955 0.012 230);
+  --secondary-foreground: oklch(0.28 0.06 240);
+  --muted: oklch(0.945 0.008 230);
+  --muted-foreground: oklch(0.48 0.035 240);
+  --accent: oklch(0.60 0.14 180);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.58 0.22 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.93 0.006 250);
-  --input: oklch(0.93 0.006 250);
-  --ring: oklch(0.55 0.22 258);
-  --chart-1: oklch(0.55 0.22 258);
-  --chart-2: oklch(0.7 0.16 250);
-  --chart-3: oklch(0.4 0.2 260);
-  --chart-4: oklch(0.8 0.1 250);
-  --chart-5: oklch(0.3 0.15 260);
+  --border: oklch(0.90 0.012 230);
+  --input: oklch(0.90 0.012 230);
+  --ring: oklch(0.50 0.18 240);
+  --chart-1: oklch(0.50 0.18 240);
+  --chart-2: oklch(0.60 0.14 180);
+  --chart-3: oklch(0.72 0.13 80);
+  --chart-4: oklch(0.65 0.12 150);
+  --chart-5: oklch(0.42 0.16 260);
   --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0.16 0.01 250);
-  --sidebar-primary: oklch(0.55 0.22 258);
+  --sidebar-foreground: oklch(0.16 0.025 240);
+  --sidebar-primary: oklch(0.50 0.18 240);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.96 0.01 250);
-  --sidebar-accent-foreground: oklch(0.2 0.02 250);
-  --sidebar-border: oklch(0.93 0.006 250);
-  --sidebar-ring: oklch(0.55 0.22 258);
+  --sidebar-accent: oklch(0.955 0.012 230);
+  --sidebar-accent-foreground: oklch(0.28 0.06 240);
+  --sidebar-border: oklch(0.90 0.012 230);
+  --sidebar-ring: oklch(0.50 0.18 240);
 }
 
 .dark {
@@ -137,6 +137,11 @@
     border-color: var(--color-border);
   }
 
+  html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -157,31 +162,101 @@
 }
 .pulse-ring { animation: soft-pulse 2s ease-out infinite; }
 
+/* Off-screen rendering to ensure canvases draw correctly before print (avoiding display:none drawing failures) */
+.print-label,
+.print-bulk-container {
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+  width: 50mm !important;
+  height: auto !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  display: block !important;
+}
+
 /* Thermal label print: 50mm x 30mm */
 @media print {
-  body * { visibility: hidden !important; }
-  .print-label, .print-label * { visibility: visible !important; }
-  .print-label {
+  /* Hide main page layouts */
+  .admin-dashboard-layout,
+  .staff-counter-layout,
+  .auth-layout {
+    display: none !important;
+  }
+
+  /* Hide the modal overlays and default dialog content cards */
+  div[data-radix-portal] [role="dialog"],
+  div[data-radix-portal] [role="presentation"] > div:first-child,
+  div[data-radix-portal] .bg-black\/80 {
+    display: none !important;
+  }
+
+  /* Ensure our print elements and their contents are visible and laid out */
+  .print-label,
+  .print-label *,
+  .print-bulk-container,
+  .print-bulk-container * {
+    visibility: visible !important;
     display: block !important;
-    position: fixed;
-    inset: 0;
-    width: 50mm;
-    height: 30mm;
-    padding: 2mm;
-    background: white;
-    color: black;
-    text-align: center;
-    font-family: sans-serif;
+    opacity: 1 !important;
+  }
+
+  /* Single label styling */
+  .print-label {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 50mm !important;
+    height: 30mm !important;
+    padding: 2mm !important;
+    background: white !important;
+    color: black !important;
+    text-align: center !important;
+    font-family: sans-serif !important;
   }
   .print-label .label-name {
-    font-size: 9pt;
-    font-weight: 600;
-    margin-bottom: 1mm;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 9pt !important;
+    font-weight: 600 !important;
+    margin-bottom: 1mm !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
-  .print-label canvas { max-width: 100%; height: auto; }
+  .print-label canvas { max-width: 100% !important; height: auto !important; }
+  
+  /* Bulk labels styling */
+  .print-bulk-container {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    background: white !important;
+  }
+  .print-bulk-label {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 50mm !important;
+    height: 30mm !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    box-sizing: border-box !important;
+    padding: 2mm !important;
+    background: white !important;
+    color: black !important;
+  }
+  .print-bulk-label .label-name {
+    font-size: 9pt !important;
+    font-weight: 600 !important;
+    margin-bottom: 1mm !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+  .print-bulk-label canvas { max-width: 100% !important; height: auto !important; }
+
   @page { size: 50mm 30mm; margin: 0; }
 }
 
