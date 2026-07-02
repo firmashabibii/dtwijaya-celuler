@@ -933,7 +933,7 @@ function CategoriesTab({ onViewItems }: { onViewItems: (id: number) => void }) {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {categories.map((c) => {
+                {categories.map((c, index) => {
                   const count = items.filter(it => it.category_id === c.id).length;
                   return (
                     <Card key={c.id} className="overflow-hidden rounded-2xl border border-zinc-200/80 bg-white/50 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-300 flex flex-col justify-between">
@@ -945,7 +945,7 @@ function CategoriesTab({ onViewItems }: { onViewItems: (id: number) => void }) {
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent flex items-end p-3">
                           <span className="text-[9px] font-mono font-bold text-white/90 bg-black/30 backdrop-blur-xs px-2 py-0.5 rounded-full">
-                            ID: #{c.id}
+                            No: #{index + 1}
                           </span>
                         </div>
                       </div>
