@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import bwipjs from "bwip-js/browser";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogPortal } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogPortal } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Printer } from "lucide-react";
 
@@ -12,20 +12,19 @@ interface Props {
 }
 
 export function BarcodeModal({ open, onOpenChange, sku, name }: Props) {
-  // Use useCallback ref to guarantee canvas rendering once the element mounts in the DOM
   const canvasRef = useCallback((node: HTMLCanvasElement | null) => {
     if (node && sku) {
       try {
         bwipjs.toCanvas(node, {
           bcid: "code128",
           text: sku,
-          scale: 2,
+          scale: 2.5,
           height: 12,
           includetext: true,
           textxalign: "center",
         });
       } catch (e) {
-        console.error("Gagal menggambar barcode:", e);
+        console.error(e);
       }
     }
   }, [sku]);
@@ -36,7 +35,7 @@ export function BarcodeModal({ open, onOpenChange, sku, name }: Props) {
         bwipjs.toCanvas(node, {
           bcid: "code128",
           text: sku,
-          scale: 2,
+          scale: 3,
           height: 10,
           includetext: true,
           textxalign: "center",
@@ -52,7 +51,10 @@ export function BarcodeModal({ open, onOpenChange, sku, name }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md print:hidden overflow-hidden">
-        <DialogHeader><DialogTitle>Barcode Label — {name}</DialogTitle></DialogHeader>
+        <DialogHeader>
+          <DialogTitle>Barcode Label — {name}</DialogTitle>
+          <DialogDescription className="sr-only">Pratinjau cetak barcode barang {name} dengan SKU {sku}.</DialogDescription>
+        </DialogHeader>
         <div className="flex flex-col items-center justify-center gap-2 py-4 w-full max-w-full overflow-hidden">
           <canvas ref={canvasRef} className="max-w-full h-auto object-contain mx-auto" />
           <p className="text-sm text-muted-foreground mt-1">{sku}</p>

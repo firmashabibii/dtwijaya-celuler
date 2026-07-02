@@ -89,6 +89,7 @@ export function BulkBarcodeModal({ open, onOpenChange, items }: Props) {
       <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Cetak Semua Barcode ({items.length} Barang)</DialogTitle>
+          <DialogDescription className="sr-only">Unduh seluruh barcode barang dalam bentuk PDF ukuran 50mm x 30mm.</DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 py-4">
           {items.map((item) => (
