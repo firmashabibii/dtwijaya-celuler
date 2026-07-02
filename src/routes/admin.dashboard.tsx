@@ -27,7 +27,7 @@ type Item = {
   id: number; name: string; sku: string; quantity: number; min_stock: number;
   price: number | null; category_id: number | null; updated_at: string;
 };
-type Category = { id: number; name: string };
+type Category = { id: number; name: string; image: string | null };
 
 function AdminDashboard() {
   const { loading, session, profile, signOut } = useAuth();
@@ -185,7 +185,7 @@ function ItemsTab({
                     : "bg-white text-zinc-600 border-zinc-200 hover:bg-zinc-50"
                 }`}
               >
-                <CategoryImage src={getCategoryImage(c.name, c.id)} alt="" className="size-4 rounded-full object-cover shrink-0" />
+                <CategoryImage src={getCategoryImage(c.name, c.id, c.image)} alt="" className="size-4 rounded-full object-cover shrink-0" />
                 {c.name} ({count})
               </button>
             );
@@ -223,7 +223,7 @@ function ItemsTab({
                       <div className="flex items-center gap-2 mt-2">
                         {cat ? (
                           <div className="flex items-center gap-1.5 bg-zinc-50/50 border border-zinc-200/50 rounded-lg px-2 py-0.5">
-                            <CategoryImage src={getCategoryImage(cat.name, cat.id)} alt="" className="size-4 rounded-full object-cover shrink-0" />
+                            <CategoryImage src={getCategoryImage(cat.name, cat.id, cat.image)} alt="" className="size-4 rounded-full object-cover shrink-0" />
                             <span className="text-[10px] font-bold text-zinc-650">{cat.name}</span>
                           </div>
                         ) : (
@@ -305,7 +305,7 @@ function ItemsTab({
                         <TableCell className="text-muted-foreground">
                           {cat ? (
                             <div className="flex items-center gap-2.5">
-                              <CategoryImage src={getCategoryImage(cat.name, cat.id)} alt="" className="size-7 rounded-full object-cover border border-zinc-200/80 shadow-xs shrink-0" />
+                              <CategoryImage src={getCategoryImage(cat.name, cat.id, cat.image)} alt="" className="size-7 rounded-full object-cover border border-zinc-200/80 shadow-xs shrink-0" />
                               <span className="font-semibold text-zinc-800">{cat.name}</span>
                             </div>
                           ) : (
@@ -457,7 +457,7 @@ function ItemDialog({ open, onOpenChange, editing, categories }: {
                 {categories.map(c => (
                   <SelectItem key={c.id} value={String(c.id)}>
                     <div className="flex items-center gap-2">
-                      <CategoryImage src={getCategoryImage(c.name, c.id)} alt="" className="size-5 rounded-full object-cover border border-zinc-200" />
+                      <CategoryImage src={getCategoryImage(c.name, c.id, c.image)} alt="" className="size-5 rounded-full object-cover border border-zinc-200" />
                       <span className="font-semibold text-xs text-zinc-800">{c.name}</span>
                     </div>
                   </SelectItem>
@@ -756,7 +756,8 @@ function SalesTab() {
 }
 
 // Helper to get illustrative category images dynamically based on keywords
-export function getCategoryImage(name: string, id?: number): string {
+export function getCategoryImage(name: string, id?: number, dbImage?: string | null): string {
+  if (dbImage) return dbImage;
   if (id) {
     const customImages = localStorage.getItem("category_custom_images");
     if (customImages) {
@@ -939,7 +940,7 @@ function CategoriesTab({ onViewItems }: { onViewItems: (id: number) => void }) {
                     <Card key={c.id} className="overflow-hidden rounded-2xl border border-zinc-200/80 bg-white/50 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-300 flex flex-col justify-between">
                       <div className="h-32 w-full overflow-hidden relative bg-zinc-100">
                         <CategoryImage 
-                          src={getCategoryImage(c.name, c.id)} 
+                          src={getCategoryImage(c.name, c.id, c.image)} 
                           alt={c.name} 
                           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
                         />
@@ -1055,16 +1056,20 @@ function CategoryDialog({
   useEffect(() => {
     if (editing) {
       setName(editing.name);
-      const customImages = localStorage.getItem("category_custom_images");
-      if (customImages) {
-        try {
-          const map = JSON.parse(customImages);
-          setImageUrl(map[editing.id] || "");
-        } catch (e) {
+      if (editing.image) {
+        setImageUrl(editing.image);
+      } else {
+        const customImages = localStorage.getItem("category_custom_images");
+        if (customImages) {
+          try {
+            const map = JSON.parse(customImages);
+            setImageUrl(map[editing.id] || "");
+          } catch (e) {
+            setImageUrl("");
+          }
+        } else {
           setImageUrl("");
         }
-      } else {
-        setImageUrl("");
       }
     } else {
       setName("");
@@ -1076,18 +1081,19 @@ function CategoryDialog({
     mutationFn: async () => {
       const trimmedName = name.trim();
       if (!trimmedName) throw new Error("Nama kategori harus diisi");
+      const imgVal = imageUrl.trim() || null;
 
       if (editing) {
         const { error } = await supabase
           .from("categories")
-          .update({ name: trimmedName })
+          .update({ name: trimmedName, image: imgVal })
           .eq("id", editing.id);
         if (error) throw error;
         return { id: editing.id };
       } else {
         const { data, error } = await supabase
           .from("categories")
-          .insert({ name: trimmedName })
+          .insert({ name: trimmedName, image: imgVal })
           .select()
           .single();
         if (error) throw error;
