@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import bwipjs from "bwip-js/browser";
 import { jsPDF } from "jspdf";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Download, Loader2 } from "lucide-react";
 
